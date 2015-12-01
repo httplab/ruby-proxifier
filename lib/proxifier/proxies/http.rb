@@ -8,7 +8,10 @@ module Proxifier
 
       socket << "CONNECT #{host}:#{port} HTTP/1.1\r\n"
       socket << "Host: #{host}:#{port}\r\n"
-      socket << "Proxy-Authorization: Basic #{["#{user}:#{password}"].pack("m").chomp}\r\n" if user
+      if user
+        credential = ["#{user}:#{password}"].pack("m").gsub("\n", '')
+        socket << "Proxy-Authorization: Basic #{credential}\r\n"
+      end
       socket << "\r\n"
 
       buffer = Net::BufferedIO.new(socket)
